@@ -20,36 +20,38 @@ void addAtBeg(int value)
     else
     {
         Node *ptr, *temp;
-        ptr = start;
-        while(ptr -> next != start)
-        {
+        ptr = start;   
+
+        while(ptr->next != start)
             ptr = ptr -> next;
-        }
-        temp = (Node*)malloc(sizeof(temp));
+
+        temp = (Node*)malloc(sizeof(Node));
         temp -> data = value;
         temp -> next = start;
         start = temp;
         ptr -> next = start;
     }
 }
+
 void addAtEnd(int value)
 {
     Node *temp, *ptr;
     temp = (Node*)malloc(sizeof(Node));
     temp -> data = value;
-    temp -> next = NULL;
     if(start == NULL)
     {
         start = temp;
+        start -> next = start;
     }
     else
     {
         ptr = start;
-        while (ptr->next != NULL)
+        while (ptr->next != start)
         {
             ptr = ptr -> next;
         }
         ptr -> next = temp;
+        temp -> next = start;
     }
 }
 
@@ -61,25 +63,27 @@ void addAtPosition(int value, int pos)
     ptr = start;
     for(int i=2;i<pos;i++)
     {
-        if(ptr->next = NULL)
+        if(ptr->next == NULL)
         {
             break;
         }
         ptr = ptr->next;
     }
     temp->next = ptr->next;
-    ptr->next = start;
+    ptr->next = temp;
 }
 
 void display()
 {
+    if(start == NULL) return;
     Node *ptr;
     ptr = start;
-    while (ptr!=NULL)
+    do
     {
-        printf("%d\n",ptr->data);
+        printf("%d\t",ptr->data);
         ptr = ptr->next;
-    }
+    } while (ptr!=start);
+    printf("\n");
 }
 
 int main()
@@ -88,6 +92,7 @@ int main()
     addAtEnd(22);
     addAtEnd(333);
     addAtEnd(4444);
+    addAtBeg(5);
     display();
 
     return 0;
