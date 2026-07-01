@@ -6,84 +6,145 @@ typedef struct node{
     struct node *next;
 }Node;
 
-Node *start;
-
+Node *start = NULL;
 
 void addAtBeg(int value)
 {
+    Node *temp = (Node*)malloc(sizeof(Node));
+    temp->data = value;
+
     if(start == NULL)
     {
-        start = (Node*)malloc(sizeof(Node));
-        start -> data = value;
-        start -> next = start;
+        temp->next = NULL;
+        start = temp;
     }
     else
     {
-        Node *ptr, *temp;
-        ptr = start;   
-
-        while(ptr->next != start)
-            ptr = ptr -> next;
-
-        temp = (Node*)malloc(sizeof(Node));
-        temp -> data = value;
-        temp -> next = start;
+        temp->next = start;
         start = temp;
-        ptr -> next = start;
     }
 }
 
 void addAtEnd(int value)
 {
-    Node *temp, *ptr;
-    temp = (Node*)malloc(sizeof(Node));
-    temp -> data = value;
+    Node *temp = (Node*)malloc(sizeof(Node));
+    temp->data = value;
+    temp->next = NULL;
+
     if(start == NULL)
     {
         start = temp;
-        start -> next = start;
     }
     else
     {
-        ptr = start;
-        while (ptr->next != start)
+        Node *ptr = start;
+        while (ptr->next != NULL)
         {
-            ptr = ptr -> next;
+            ptr = ptr->next;
         }
-        ptr -> next = temp;
-        temp -> next = start;
+        ptr->next = temp;
     }
 }
 
 void addAtPosition(int value, int pos)
 {
-    Node *temp, *ptr;
-    temp = (Node*)malloc(sizeof(Node));
-    temp -> data = value;
-    ptr = start;
-    for(int i=2;i<pos;i++)
+    if(start == NULL || pos <= 1)
     {
-        if(ptr->next == NULL)
-        {
-            break;
-        }
+        addAtBeg(value);
+        return;
+    }
+
+    Node *temp = (Node*)malloc(sizeof(Node));
+    temp->data = value;
+
+    Node *ptr = start;
+    int i;
+    for(i = 1; i < pos - 1 && ptr != NULL; i++)
+    {
         ptr = ptr->next;
     }
+
+    if(ptr == NULL)
+    {
+        addAtEnd(value);
+        free(temp);
+        return;
+    }
+
     temp->next = ptr->next;
     ptr->next = temp;
 }
 
 void display()
 {
-    if(start == NULL) return;
-    Node *ptr;
-    ptr = start;
-    do
+    if(start == NULL)
     {
-        printf("%d\t",ptr->data);
+        printf("List is empty\n");
+        return;
+    }
+
+    Node *ptr = start;
+    while (ptr != NULL)
+    {
+        printf("%d\t", ptr->data);
         ptr = ptr->next;
-    } while (ptr!=start);
+    }
     printf("\n");
+}
+
+void deleteFromBeg()
+{
+    if(start == NULL)
+        printf("List is empty\n");
+    else
+    {
+        Node *temp = start;
+        start = start->next;
+        free(temp);
+    }
+}
+
+void deleteFromEnd()
+{
+    if(start == NULL)
+        printf("List is empty\n");
+    else if(start->next == NULL)
+    {
+        free(start);
+        start = NULL;
+    }
+    else
+    {
+        Node *ptr = start;
+        while(ptr->next->next != NULL)
+        {
+            ptr = ptr->next;
+        }
+        free(ptr->next);
+        ptr->next = NULL;
+    }
+}
+
+void sortList()
+{
+    Node *p, *q;
+
+    p = start;
+    while (p != NULL)
+    {
+        q = p->next;
+        while (q != NULL)
+        {
+            if(p->data > q->data)
+            {
+                int temp = p->data;
+                p->data = q->data;
+                q->data = temp;
+            }
+            q = q->next;
+        }
+        p = p->next;
+    }
 }
 
 int main()
@@ -93,6 +154,18 @@ int main()
     addAtEnd(333);
     addAtEnd(4444);
     addAtBeg(5);
+    display();
+
+    deleteFromBeg();
+    display();
+
+    deleteFromEnd();
+    display();
+
+    addAtPosition(56, 2);
+    display();
+
+    sortList();
     display();
 
     return 0;
