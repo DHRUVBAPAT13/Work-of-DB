@@ -70,9 +70,41 @@ void addAtBeg(int value)
     }
 }
 
-void addAtPos(int pos, int value)
+void addAtPosition(int value, int pos)
 {
-    Node *ptr;
+    if(start == NULL || pos <= 1)
+    {
+        addAtBeg(value);
+        return;
+    }
+
+    Node *ptr = start;
+    int i;
+    for(i = 1; i < pos - 1 && ptr != NULL; i++)
+    {
+        ptr = ptr->next;
+    }
+
+    if(ptr == NULL)
+    {
+        addAtEnd(value);
+        return;
+    }
+
+    Node *temp = (Node*)malloc(sizeof(Node));
+    temp->data = value;
+    temp->next = ptr->next;
+    temp->prev = ptr;
+    ptr->next = temp;
+
+    if(temp->next != NULL)
+    {
+        temp->next->prev = temp;
+    }
+    else
+    {
+        end = temp;
+    }
 }
 
 int main()
@@ -85,6 +117,9 @@ int main()
     {
         addAtBeg(i*10);
     }
+    display();
+
+    addAtPosition(25, 3);
     display();
 
     return 0;
