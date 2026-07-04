@@ -107,6 +107,91 @@ void addAtPosition(int value, int pos)
     }
 }
 
+void deleteFromBeg()
+{
+    if(start == NULL)
+    {
+        printf("\nList is empty.");
+    }
+    else if(start == end)
+    {
+        free(start);
+        start = end = NULL;
+    }
+    else
+    {
+        Node *temp;
+        temp = start;
+        start = start ->next;
+        start ->prev = NULL;
+        free(temp);
+    }
+}
+
+void deleteFromEnd()
+{
+    if(start == NULL)
+    {
+        printf("\nList is empty.");
+    }
+    else if(start == end)
+    {
+        free(start);
+        start = end = NULL;
+    }
+    else
+    {
+        Node *temp;
+        temp = end;
+        end = end ->prev;
+        end ->next = NULL;
+        free(temp);
+    }
+}
+
+void deleteFromPosition(int pos)
+{
+    if(pos == 1)
+    {
+        deleteFromBeg();
+    }
+    else
+    {
+        Node *ptr, *temp;
+        ptr = start;
+        for(int i=2;i<pos;i++)
+        {
+            ptr = ptr ->next;
+        }
+        temp = ptr ->next;
+        ptr ->next = temp ->next;
+        temp ->next ->prev = ptr;
+        free(temp);
+    }
+}
+
+void sortList()
+{
+    Node *p, *q;
+
+    p = start;
+    while (p != NULL)
+    {
+        q = p->next;
+        while (q != NULL)
+        {
+            if(p->data > q->data)
+            {
+                int temp = p->data;
+                p->data = q->data;
+                q->data = temp;
+            }
+            q = q->next;
+        }
+        p = p->next;
+    }
+}
+
 int main()
 {
 
@@ -120,6 +205,9 @@ int main()
     display();
 
     addAtPosition(25, 3);
+    display();
+
+    sortList();
     display();
 
     return 0;
