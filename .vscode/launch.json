@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C/C++: gcc build and debug active file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "preLaunchTask": "C/C++: gcc build active file",
+            
+            // 👇 ADD THIS BLOCK TO FIX THE FREEZE 👇
+            "setupCommands": [
+                {
+                    "description": "Disable debuginfod to prevent GDB startup hang",
+                    "text": "set debuginfod enabled off",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
